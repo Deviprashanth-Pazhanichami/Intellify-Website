@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intellify – Empowering Students with Future Skills</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #050d1a;
+    --navy2: #0a1628;
+    --purple: #7c3aed;
+    --purple2: #a855f7;
+    --cyan: #06b6d4;
+    --cyan2: #22d3ee;
+    --pink: #ec4899;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.1);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --grad1: linear-gradient(135deg, #7c3aed, #06b6d4);
+    --grad2: linear-gradient(135deg, #a855f7, #ec4899);
+    --grad3: linear-gradient(135deg, #06b6d4, #7c3aed);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+  /* ── CANVAS ── */
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(5,13,26,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    background: var(--grad1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+  }
+
+  .logo span { color: var(--cyan); -webkit-text-fill-color: var(--cyan); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad1);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    background: var(--grad1);
+    color: #fff !important;
+    padding: 0.5rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 600 !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: 0 0 20px rgba(6,182,212,0.4); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 1100;
+  }
+  .hamburger span {
+    display: block;
+    width: 25px; height: 2px;
+    background: var(--cyan);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 5% 4rem;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .hero-glow-1 {
+    width: 500px; height: 500px;
+    background: rgba(124,58,237,0.25);
+    top: -100px; left: -100px;
+    animation: glowPulse 6s ease-in-out infinite;
+  }
+  .hero-glow-2 {
+    width: 400px; height: 400px;
+    background: rgba(6,182,212,0.2);
+    bottom: 0; right: -50px;
+    animation: glowPulse 8s ease-in-out infinite reverse;
+  }
+
+  @keyframes glowPulse {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(6,182,212,0.1);
+    border: 1px solid rgba(6,182,212,0.3);
+    color: var(--cyan);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s 0.15s ease both;
+  }
+
+  .hero-title .highlight {
+    background: var(--grad1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeDown 0.8s 0.45s ease both;
+  }
+
+  .btn-primary {
+    background: var(--grad1);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 30px rgba(124,58,237,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 50px rgba(6,182,212,0.5);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cyan);
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1.5px solid var(--cyan);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    background: rgba(6,182,212,0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(6,182,212,0.3);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    margin-top: 4rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    background: var(--grad1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; margin-top: 0.2rem; }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 1; padding: 6rem 5%; }
+  .section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  .section-title span {
+    background: var(--grad1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 3.5rem;
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  /* ── GLASS CARD ── */
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    transition: all 0.4s;
+  }
+  .glass:hover {
+    border-color: rgba(6,182,212,0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(124,58,237,0.2);
+  }
+
+  /* ── ABOUT ── */
+  #about { background: linear-gradient(180deg, transparent, rgba(124,58,237,0.05), transparent); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .about-visual {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .about-3d-ring {
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: linear-gradient(var(--navy2),var(--navy2)) padding-box,
+                var(--grad1) border-box;
+    position: absolute;
+    animation: spin 12s linear infinite;
+  }
+  .about-3d-ring:nth-child(2) {
+    width: 220px; height: 220px;
+    animation: spin 8s linear infinite reverse;
+    background: linear-gradient(var(--navy2),var(--navy2)) padding-box,
+                var(--grad2) border-box;
+  }
+  .about-3d-ring:nth-child(3) {
+    width: 160px; height: 160px;
+    animation: spin 5s linear infinite;
+    background: linear-gradient(var(--navy2),var(--navy2)) padding-box,
+                var(--grad3) border-box;
+  }
+  .about-center-icon {
+    position: absolute;
+    font-size: 3rem;
+    z-index: 2;
+  }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  .about-content h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  .about-content p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .about-pills { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+  .pill {
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: var(--purple2);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: linear-gradient(180deg, transparent, rgba(6,182,212,0.04), transparent); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .service-card {
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad1);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.2rem;
+    background: var(--grad1);
+    box-shadow: 0 0 30px rgba(124,58,237,0.4);
+  }
+  .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .service-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+  /* ── COURSES ── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .course-card {
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad1);
+    opacity: 0;
+    transition: opacity 0.4s;
+    border-radius: 20px;
+    z-index: -1;
+  }
+  .course-card:hover::after { opacity: 0.08; }
+  .course-tag {
+    display: inline-block;
+    background: rgba(6,182,212,0.15);
+    border: 1px solid rgba(6,182,212,0.3);
+    color: var(--cyan);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.25rem 0.8rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+  }
+  .course-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+  .course-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .course-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem; }
+  .course-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  .course-meta span { color: var(--cyan); }
+  .btn-enroll {
+    width: 100%;
+    background: var(--grad1);
+    color: #fff;
+    padding: 0.6rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-enroll:hover {
+    opacity: 0.85;
+    box-shadow: 0 0 20px rgba(6,182,212,0.3);
+    transform: translateY(-2px);
+  }
+
+  /* ── WHY ── */
+  #why { background: linear-gradient(180deg, transparent, rgba(124,58,237,0.05), transparent); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .why-card {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .why-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  .why-card:nth-child(2) .why-icon { animation-delay: 0.5s; }
+  .why-card:nth-child(3) .why-icon { animation-delay: 1s; }
+  .why-card:nth-child(4) .why-icon { animation-delay: 1.5s; }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .why-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .why-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { overflow: hidden; }
+  .testimonials-track {
+    display: flex;
+    gap: 1.5rem;
+    animation: scrollTrack 30s linear infinite;
+    width: max-content;
+  }
+  .testimonials-track:hover { animation-play-state: paused; }
+  @keyframes scrollTrack {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .testimonial-card {
+    padding: 2rem;
+    width: 320px;
+    flex-shrink: 0;
+  }
+  .stars { color: #fbbf24; margin-bottom: 1rem; font-size: 1rem; }
+  .testimonial-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.2rem; font-style: italic; }
+  .t-author { display: flex; align-items: center; gap: 0.8rem; }
+  .t-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    background: var(--grad1);
+    flex-shrink: 0;
+  }
+  .t-name { font-size: 0.9rem; font-weight: 600; }
+  .t-role { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── GALLERY ── */
+  #gallery { background: linear-gradient(180deg, transparent, rgba(6,182,212,0.04), transparent); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .gallery-item {
+    height: 180px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    transition: all 0.4s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-item::before {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 0.5rem;
+    background: linear-gradient(transparent, rgba(5,13,26,0.9));
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+  }
+  .gallery-item:hover::before { transform: translateY(0); }
+  .gallery-item:hover {
+    border-color: rgba(6,182,212,0.4);
+    transform: scale(1.03);
+    box-shadow: 0 10px 40px rgba(124,58,237,0.25);
+  }
+
+  /* ── CTA ── */
+  #cta {
+    text-align: center;
+  }
+  .cta-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.1));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 30px;
+    padding: 5rem 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--grad1);
+    border-radius: 32px;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(10px);
+  }
+  .cta-box h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+  }
+  .cta-box p { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+  .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ── CONTACT ── */
+  #contact { background: linear-gradient(180deg, transparent, rgba(124,58,237,0.05), transparent); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .contact-info h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
+  }
+  .contact-item:hover {
+    border-color: rgba(6,182,212,0.3);
+    transform: translateX(5px);
+  }
+  .contact-ico {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--grad1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-item p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.1rem; }
+  .contact-item strong { font-size: 0.95rem; }
+  .whatsapp-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #fff;
+    padding: 0.9rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-top: 1.5rem;
+    width: fit-content;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(37,211,102,0.3);
+  }
+  .whatsapp-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 35px rgba(37,211,102,0.5);
+  }
+  .contact-form-card { padding: 2rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: var(--text-muted);
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(6,182,212,0.15);
+  }
+  .form-group select option { background: var(--navy2); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-submit {
+    width: 100%;
+    background: var(--grad1);
+    color: #fff;
+    padding: 0.9rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Poppins', sans-serif;
+  }
+  .btn-submit:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(6,182,212,0.4);
+  }
+
+  /* ── MAP ── */
+  .map-placeholder {
+    margin-top: 1.5rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  .map-placeholder span { font-size: 2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: rgba(5,13,26,0.95);
+    border-top: 1px solid var(--glass-border);
+    padding: 3rem 5% 1.5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto 2rem;
+  }
+  .footer-brand p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.7; }
+  .footer-col h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+  .footer-col ul a:hover { color: var(--cyan); }
+  .footer-bottom {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.7s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.7s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* ── MOBILE NAV OVERLAY ── */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,13,26,0.97);
+    backdrop-filter: blur(20px);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .mobile-nav a:hover { color: var(--cyan); }
+  .close-nav {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    font-size: 1.8rem;
+    color: var(--cyan);
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-visual { height: 250px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-box { padding: 3rem 1.5rem; }
+    section { padding: 4rem 4%; }
+  }
+
+  /* ── FLOATING SHAPES ── */
+  .floating-shape {
+    position: absolute;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .shape-1 {
+    width: 200px; height: 200px;
+    border: 2px solid var(--cyan);
+    border-radius: 30px;
+    top: 10%; right: 5%;
+    animation: floatShape 10s ease-in-out infinite;
+    transform: rotate(45deg);
+  }
+  .shape-2 {
+    width: 120px; height: 120px;
+    border: 2px solid var(--purple2);
+    border-radius: 50%;
+    top: 40%; left: 2%;
+    animation: floatShape 7s ease-in-out infinite reverse;
+  }
+  .shape-3 {
+    width: 80px; height: 80px;
+    border: 2px solid var(--cyan);
+    bottom: 20%; right: 8%;
+    animation: floatShape 9s ease-in-out infinite;
+    transform: rotate(20deg);
+  }
+  @keyframes floatShape {
+    0%,100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-30px) rotate(55deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- FLOATING SHAPES -->
+<div class="floating-shape shape-1"></div>
+<div class="floating-shape shape-2"></div>
+<div class="floating-shape shape-3"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo">Intelli<span>fy</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-nav" onclick="closeMobileNav()">✕</button>
+  <a href="#home" onclick="closeMobileNav()">Home</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#courses" onclick="closeMobileNav()">Courses</a>
+  <a href="#why" onclick="closeMobileNav()">Why Intellify</a>
+  <a href="#testimonials" onclick="closeMobileNav()">Reviews</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div>
+    <div class="hero-badge">🚀 Future-Ready Education</div>
+    <h1 class="hero-title">
+      <span class="highlight">Intellify</span> –<br>
+      Empowering Students<br>with Future Skills
+    </h1>
+    <p class="hero-sub">
+      Personalized Home Tuition, Online Tuition and Industry-Ready Technical Courses for students and professionals.
+    </p>
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary">Find a Tutor</a>
+      <a href="#courses" class="btn-secondary">Explore Courses</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Students Trained</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Expert Tutors</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Courses Offered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Who We Are</div>
+  <div class="about-grid">
+    <div class="about-visual reveal-left">
+      <div class="about-3d-ring"></div>
+      <div class="about-3d-ring"></div>
+      <div class="about-3d-ring"></div>
+      <div class="about-center-icon">🎓</div>
+    </div>
+    <div class="about-content reveal-right">
+      <h3>Shaping the <span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Minds of Tomorrow</span></h3>
+      <p>
+        Intellify is a premier education brand committed to delivering personalized, high-quality learning experiences. We bridge the gap between academic learning and real-world skills.
+      </p>
+      <p>
+        Our expert tutors provide one-on-one home tuition for school students, while our technical courses prepare young professionals for the demands of the modern digital economy.
+      </p>
+      <div class="about-pills">
+        <span class="pill">🏠 Home Tuition</span>
+        <span class="pill">🌐 Online Tuition</span>
+        <span class="pill">💻 Technical Courses</span>
+        <span class="pill">🌱 Skill Development</span>
+        <span class="pill">🎯 Career Guidance</span>
+        <span class="pill">👦 Coding for Kids</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Offer</div>
+  <div class="section-title">Our <span>Core Services</span></div>
+  <div class="section-sub">Comprehensive educational solutions tailored for every stage of your learning journey.</div>
+  <div class="services-grid">
+    <div class="service-card glass reveal">
+      <div class="service-icon">🏠</div>
+      <h3>Home Tuition</h3>
+      <p>Personalized one-to-one learning for school students. Expert tutors come to your home, ensuring focused attention and faster academic progress.</p>
+    </div>
+    <div class="service-card glass reveal">
+      <div class="service-icon" style="background:var(--grad2)">💻</div>
+      <h3>Technical Courses</h3>
+      <p>Industry-ready courses like Python, Data Analytics, Excel and Power BI. Gain job-ready skills with hands-on projects and real-world case studies.</p>
+    </div>
+    <div class="service-card glass reveal">
+      <div class="service-icon" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">🧒</div>
+      <h3>Coding for Kids</h3>
+      <p>Fun and interactive programming classes for young learners. Build logical thinking, creativity, and problem-solving through engaging coding activities.</p>
+    </div>
+    <div class="service-card glass reveal">
+      <div class="service-icon" style="background:linear-gradient(135deg,#f59e0b,#ec4899)">🌟</div>
+      <h3>Skill Development</h3>
+      <p>Communication, career readiness and technology skills. Holistic programs that prepare students and professionals for tomorrow's challenges.</p>
+    </div>
+    <div class="service-card glass reveal">
+      <div class="service-icon" style="background:linear-gradient(135deg,#10b981,#06b6d4)">🌐</div>
+      <h3>Online Tuition</h3>
+      <p>Live interactive online classes from the comfort of your home. Learn from expert tutors via video sessions — flexible, convenient and equally effective.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+  <div class="section-label">Learn & Grow</div>
+  <div class="section-title">Our <span>Popular Courses</span></div>
+  <div class="section-sub">Industry-aligned courses designed by experts to make you job-ready and future-proof.</div>
+  <div class="courses-grid">
+    <div class="course-card glass reveal">
+      <div class="course-tag">Programming</div>
+      <div class="course-icon">🐍</div>
+      <h3>Python Programming</h3>
+      <p>From basics to advanced — loops, functions, OOP, file handling and real-world projects.</p>
+      <div class="course-meta">⏱ <span>8 Weeks</span> &nbsp;|&nbsp; 👨‍💻 <span>Beginner–Advanced</span></div>
+      <button class="btn-enroll" onclick="scrollTo('#contact')">Enroll Now</button>
+    </div>
+    <div class="course-card glass reveal">
+      <div class="course-tag">Analytics</div>
+      <div class="course-icon">📊</div>
+      <h3>Data Analytics</h3>
+      <p>Master data analysis with Python, Pandas, Matplotlib, and real business datasets.</p>
+      <div class="course-meta">⏱ <span>10 Weeks</span> &nbsp;|&nbsp; 👨‍💻 <span>Intermediate</span></div>
+      <button class="btn-enroll" onclick="scrollTo('#contact')">Enroll Now</button>
+    </div>
+    <div class="course-card glass reveal">
+      <div class="course-tag">Business</div>
+      <div class="course-icon">📗</div>
+      <h3>Excel for Business</h3>
+      <p>Formulas, pivot tables, charts, dashboards and advanced automation with macros.</p>
+      <div class="course-meta">⏱ <span>4 Weeks</span> &nbsp;|&nbsp; 👨‍💻 <span>All Levels</span></div>
+      <button class="btn-enroll" onclick="scrollTo('#contact')">Enroll Now</button>
+    </div>
+    <div class="course-card glass reveal">
+      <div class="course-tag">Visualization</div>
+      <div class="course-icon">📈</div>
+      <h3>Power BI Dashboarding</h3>
+      <p>Build interactive dashboards and business intelligence reports from raw data.</p>
+      <div class="course-meta">⏱ <span>6 Weeks</span> &nbsp;|&nbsp; 👨‍💻 <span>Intermediate</span></div>
+      <button class="btn-enroll" onclick="scrollTo('#contact')">Enroll Now</button>
+    </div>
+    <div class="course-card glass reveal">
+      <div class="course-tag">Fundamentals</div>
+      <div class="course-icon">🖥️</div>
+      <h3>Basic Computer Skills</h3>
+      <p>MS Office, internet basics, typing, email communication and digital literacy for all ages.</p>
+      <div class="course-meta">⏱ <span>3 Weeks</span> &nbsp;|&nbsp; 👨‍💻 <span>Beginner</span></div>
+      <button class="btn-enroll" onclick="scrollTo('#contact')">Enroll Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- WHY INTELLIFY -->
+<section id="why">
+  <div class="section-label">Our Advantage</div>
+  <div class="section-title">Why Choose <span>Intellify?</span></div>
+  <div class="section-sub">We go beyond teaching — we build futures with care, expertise, and innovation.</div>
+  <div class="why-grid">
+    <div class="why-card glass reveal">
+      <span class="why-icon">🎓</span>
+      <h3>Expert Tutors</h3>
+      <p>Highly qualified and experienced educators who are passionate about student success.</p>
+    </div>
+    <div class="why-card glass reveal">
+      <span class="why-icon">🔬</span>
+      <h3>Practical Learning</h3>
+      <p>Hands-on projects, real datasets, and live sessions that make learning stick.</p>
+    </div>
+    <div class="why-card glass reveal">
+      <span class="why-icon">👥</span>
+      <h3>Small Batch Sizes</h3>
+      <p>Intimate class sizes ensure every student gets the attention they deserve.</p>
+    </div>
+    <div class="why-card glass reveal">
+      <span class="why-icon">🚀</span>
+      <h3>Career Guidance</h3>
+      <p>Resume building, interview preparation, and industry connections to launch your career.</p>
+    </div>
+    <div class="why-card glass reveal">
+      <span class="why-icon">📱</span>
+      <h3>Flexible Timings</h3>
+      <p>Morning, evening and weekend batches designed around your busy schedule.</p>
+    </div>
+    <div class="why-card glass reveal">
+      <span class="why-icon">🏆</span>
+      <h3>Certified Programs</h3>
+      <p>Industry-recognized certificates that add real value to your academic and professional profile.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label">Student Stories</div>
+  <div class="section-title">What Our <span>Students Say</span></div>
+  <div class="section-sub">Hear from students who transformed their learning journey with Intellify.</div>
+  <div style="overflow:hidden; padding:1rem 0;">
+    <div class="testimonials-track">
+      <!-- First set -->
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"Intellify's home tuition completely changed my academic performance. My grades improved from C to A+ in just 3 months. The tutor was incredibly patient and explained every concept clearly."</p>
+        <div class="t-author">
+          <div class="t-avatar">A</div>
+          <div><div class="t-name">Arjun Reddy</div><div class="t-role">Class 10 Student</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"The Python course at Intellify was phenomenal. The instructors use practical examples from real companies which made learning so much more relevant. I landed my first tech job within 2 months!"</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:var(--grad2)">P</div>
+          <div><div class="t-name">Priya Sharma</div><div class="t-role">Software Developer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"My daughter joined Intellify's Coding for Kids program and she now builds her own games! The way they teach kids is truly magical — fun, interactive, and age-appropriate."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">S</div>
+          <div><div class="t-name">Sunitha Nair</div><div class="t-role">Parent</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"Power BI course was exactly what I needed for my corporate job. The instructor knows the subject deeply and the hands-on dashboard projects gave me real confidence. Highly recommend!"</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#f59e0b,#ec4899)">R</div>
+          <div><div class="t-name">Ravi Kumar</div><div class="t-role">Business Analyst</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"From knowing nothing about Excel to building complex financial models — that's my Intellify journey. The course is structured brilliantly, moving from basics to advanced without overwhelming you."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">M</div>
+          <div><div class="t-name">Meera Patel</div><div class="t-role">Finance Executive</div></div>
+        </div>
+      </div>
+      <!-- Duplicate set for seamless loop -->
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"Intellify's home tuition completely changed my academic performance. My grades improved from C to A+ in just 3 months. The tutor was incredibly patient and explained every concept clearly."</p>
+        <div class="t-author">
+          <div class="t-avatar">A</div>
+          <div><div class="t-name">Arjun Reddy</div><div class="t-role">Class 10 Student</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"The Python course at Intellify was phenomenal. The instructors use practical examples from real companies which made learning so much more relevant. I landed my first tech job within 2 months!"</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:var(--grad2)">P</div>
+          <div><div class="t-name">Priya Sharma</div><div class="t-role">Software Developer</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"My daughter joined Intellify's Coding for Kids program and she now builds her own games! The way they teach kids is truly magical — fun, interactive, and age-appropriate."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">S</div>
+          <div><div class="t-name">Sunitha Nair</div><div class="t-role">Parent</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"Power BI course was exactly what I needed for my corporate job. The instructor knows the subject deeply and the hands-on dashboard projects gave me real confidence. Highly recommend!"</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#f59e0b,#ec4899)">R</div>
+          <div><div class="t-name">Ravi Kumar</div><div class="t-role">Business Analyst</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass">
+        <div class="stars">★★★★★</div>
+        <p>"From knowing nothing about Excel to building complex financial models — that's my Intellify journey. The course is structured brilliantly, moving from basics to advanced without overwhelming you."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">M</div>
+          <div><div class="t-name">Meera Patel</div><div class="t-role">Finance Executive</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-label">Our Learning Space</div>
+  <div class="section-title">Life at <span>Intellify</span></div>
+  <div class="section-sub">Glimpses of our vibrant learning environment and student activities.</div>
+  <div class="gallery-grid">
+    <div class="gallery-item reveal" data-label="HOME TUITION">📚</div>
+    <div class="gallery-item reveal" data-label="PYTHON CLASS">🐍</div>
+    <div class="gallery-item reveal" data-label="KIDS CODING">👦</div>
+    <div class="gallery-item reveal" data-label="DATA ANALYTICS">📊</div>
+    <div class="gallery-item reveal" data-label="GROUP SESSION">👥</div>
+    <div class="gallery-item reveal" data-label="POWER BI">📈</div>
+    <div class="gallery-item reveal" data-label="EXCEL TRAINING">📗</div>
+    <div class="gallery-item reveal" data-label="GRADUATION">🎓</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-box reveal">
+    <h2>Start Your Learning Journey<br>with <span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Intellify</span></h2>
+    <p>Join thousands of students who have already transformed their skills and careers with our expert-led programs.</p>
+    <div class="cta-buttons">
+      <a href="#contact" class="btn-primary">Enroll Now</a>
+      <a href="#contact" class="btn-secondary">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <div class="section-title">Contact <span>Intellify</span></div>
+  <div class="section-sub">Ready to start learning? Reach out to us and we'll help you find the perfect course.</div>
+  <div class="contact-grid">
+    <div class="contact-info reveal-left">
+      <h3>Let's <span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Connect</span></h3>
+      <div class="contact-item">
+        <div class="contact-ico">📞</div>
+        <div>
+          <p>Phone Number</p>
+          <strong>+91 98403 45235</strong>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-ico" style="background:var(--grad2)">📧</div>
+        <div>
+          <p>Email Address</p>
+          <strong>intellify25@gmail.com</strong>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-ico" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">📍</div>
+        <div>
+          <p>Location</p>
+          <strong>Chennai, India</strong>
+        </div>
+      </div>
+      <a href="https://wa.me/919840345235?text=Hi%20Intellify!%20I%20am%20interested%20in%20your%20courses." class="whatsapp-btn" target="_blank">
+        💬 Chat on WhatsApp
+      </a>
+      <div class="map-placeholder">
+        <span>🗺️</span>
+        <p>Chennai, Tamil Nadu, India</p>
+        <p style="font-size:0.75rem;color:var(--cyan)">Replace with your Google Maps embed</p>
+      </div>
+    </div>
+    <div class="contact-form-card glass reveal-right">
+      <h3 style="font-family:'Orbitron';font-size:1.2rem;margin-bottom:1.5rem;">Send a <span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Message</span></h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label>Phone / WhatsApp</label>
+        <input type="tel" placeholder="+91 XXXXX XXXXX">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@email.com">
+      </div>
+      <div class="form-group">
+        <label>Interested In</label>
+        <select>
+          <option>Home Tuition</option>
+          <option>Online Tuition</option>
+          <option>Python Programming</option>
+          <option>Data Analytics</option>
+          <option>Excel for Business</option>
+          <option>Power BI</option>
+          <option>Coding for Kids</option>
+          <option>Skill Development</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us about your learning goals..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit(this)">🚀 Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Intelli<span>fy</span></div>
+      <p>Empowering students and professionals with future-ready skills through personalized home tuition and industry-aligned technical courses.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Home Tuition</a></li>
+        <li><a href="#services">Online Tuition</a></li>
+        <li><a href="#services">Technical Courses</a></li>
+        <li><a href="#services">Coding for Kids</a></li>
+        <li><a href="#services">Skill Development</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Courses</h4>
+      <ul>
+        <li><a href="#courses">Python Programming</a></li>
+        <li><a href="#courses">Data Analytics</a></li>
+        <li><a href="#courses">Excel for Business</a></li>
+        <li><a href="#courses">Power BI</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#why">Why Intellify</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Intellify. All rights reserved. | Designed with ❤️ for future learners.</p>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── PARTICLE CANVAS ──
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const particles = [];
+const count = window.innerWidth < 768 ? 50 : 100;
+
+for (let i = 0; i < count; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 0.5,
+    dx: (Math.random() - 0.5) * 0.4,
+    dy: (Math.random() - 0.5) * 0.4,
+    alpha: Math.random() * 0.5 + 0.2,
+    color: Math.random() > 0.5 ? '#06b6d4' : '#7c3aed'
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.alpha;
+    ctx.fill();
+    p.x += p.dx; p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+
+  // Draw lines between close particles
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = particles[i].color;
+        ctx.globalAlpha = (1 - dist / 120) * 0.12;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// ── NAVBAR ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.background = window.scrollY > 50
+    ? 'rgba(5,13,26,0.97)'
+    : 'rgba(5,13,26,0.8)';
+});
+
+// ── MOBILE NAV ──
+function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+// ── FORM SUBMIT ──
+function handleSubmit(btn) {
+  btn.textContent = '✅ Message Sent!';
+  btn.style.background = 'linear-gradient(135deg,#10b981,#06b6d4)';
+  setTimeout(() => {
+    btn.textContent = '🚀 Send Message';
+    btn.style.background = '';
+  }, 3000);
+}
+
+// ── SMOOTH SCROLL for anchor buttons ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+function scrollTo(id) {
+  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── COUNTER ANIMATION ──
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const text = el.textContent;
+    const num = parseInt(text);
+    const suffix = text.replace(num, '');
+    let current = 0;
+    const step = num / 50;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, num);
+      el.textContent = Math.round(current) + suffix;
+      if (current >= num) clearInterval(interval);
+    }, 30);
+  });
+}
+
+const heroObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    animateCounters();
+    heroObserver.disconnect();
+  }
+}, { threshold: 0.5 });
+heroObserver.observe(document.querySelector('.hero-stats'));
+</script>
+</body>
+</html>
